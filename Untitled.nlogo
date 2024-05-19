@@ -1,6 +1,7 @@
 
+
 turtles-own [
-  state   ; состояние агента: susceptible, exposed, infected, quarantined, recovered
+  state   ; состояние агента: susceptible, exposed, infected, quarantined, recovered, died
   days_in_this_state  ; количество дней, проведенных в состоянии infected
 ]
 
@@ -17,6 +18,8 @@ to move[agent]
 end
 
 to setup
+
+
   clear-all
   ask patches [ set pcolor white ]
   create-turtles population [
@@ -27,6 +30,7 @@ to setup
   ]
   ask n-of start_count_infected turtles[
     set state "infected"
+    set color red
   ]
   reset-ticks
 end
@@ -59,7 +63,8 @@ to go
       set days_in_this_state days_in_this_state + 1
       if days_in_this_state >= duration_infected [
         ifelse random-float 100 < mortality_rate [
-          die
+          set color black
+          set state "died"
         ]
         [
           set days_in_this_state 0
@@ -69,14 +74,33 @@ to go
       ]
       if days_in_this_state = days_before_quarantined [
         if random-float 100 < prob_go_quarantined [
-          set days_in_this_state 0
+          set color magenta
           set state "quarantined"
           ]
       ]
+    ]
 
+    if state = "quarantined"[
+      set days_in_this_state days_in_this_state + 1
+      if days_in_this_state >= duration_infected [
+        ifelse random-float 100 < mortality_rate [
+          set color black
+          set state "died"
+        ]
+        [
+          set days_in_this_state 0
+          set color green
+          set state "recovered"
+        ]
+      ]
+    ]
+
+    if state = "recovered"[
+      move self
     ]
 
   ]
+
   tick
 
 end
@@ -151,7 +175,7 @@ population
 population
 0
 100
-50.0
+100.0
 1
 1
 NIL
@@ -241,7 +265,7 @@ mortality_rate
 mortality_rate
 0
 100
-100.0
+30.0
 1
 1
 NIL
