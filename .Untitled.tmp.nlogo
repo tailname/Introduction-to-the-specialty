@@ -1,50 +1,82 @@
+
 turtles-own [
   state   ; состояние агента: susceptible, exposed, infected, quarantined, recovered
   days_in_this_state  ; количество дней, проведенных в состоянии infected
 ]
+
+
+to move[agent]
+  ask agent [
+    ifelse random-float 1 < 0.5 [
+      rt random-float 180
+    ] [
+      lt random-float 180
+    ]
+    fd random-float radius
+  ]
+end
 
 to setup
   clear-all
   ask patches [ set pcolor white ]
   create-turtles population [
     setxy random-xcor random-ycor
+    set color blue
     set state "susceptible"
     set days_in_this_state 0
   ]
+  ask n-of start_count_infected turtles[
+    set state "infected"
+  ]
   reset-ticks
 end
+
 to go
   ask turtles [
+
+    if state = "susceptible"[
+      move self
+      if  any? other turtles with [state = "infected"] and distance self  < 3 [
+        if random-float 100 < prob_get_infected [
+          set color orange
+          set state "exposed"
+        ]
+      ]
+    ]
+
+    if state = "exposed" [
+      move self
+      set days_in_this_state  days_in_this_state + 1
+      if days_in_this_state >= duration_exposed[
+        set color red
+        set state "infected"
+        set days_in_this_state 0
+      ]
+    ]
+
     if state = "infected" [
+      move self
       set days_in_this_state days_in_this_state + 1
-      (ifelse
-        days_in_this_state >= duration_infected [
+      if days_in_this_state >= duration_infected [
         ifelse random-float 100 < mortality_rate [
+
           die
         ]
         [
           set days_in_this_state 0
+          set color green
           set state "recovered"
         ]
       ]
-      days_in_this_state = days_before_quarantined [
+      if days_in_this_state = days_before_quarantined [
         if random-float 100 < prob_go_quarantined [
           set days_in_this_state 0
           set state "quarantined"
           ]
-      ])
+      ]
 
     ]
-    if state = "susceptible" and any? other turtles with [state = "infected"] [
-      ifelse random-float 100 < prob_get_infected [
-        set state "exposed"
-      ] [
-        set state "susceptible"
-      ]
-    ]
-    if state = "exposed" [
-      set state "infected"
-    ]
+
   ]
   tick
 
@@ -128,14 +160,14 @@ HORIZONTAL
 
 SLIDER
 19
-129
+177
 191
-162
+210
 prob_go_quarantined
 prob_go_quarantined
 0
 100
-50.0
+57.0
 1
 1
 NIL
@@ -143,14 +175,29 @@ HORIZONTAL
 
 SLIDER
 19
-170
+218
 208
-203
+251
 days_before_quarantined
 days_before_quarantined
 0
+100
+0.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+20
+265
+203
+298
+duration_exposed
+duration_exposed
+0
 3650
-50.0
+6.0
 1
 1
 NIL
@@ -158,14 +205,14 @@ HORIZONTAL
 
 SLIDER
 18
-211
-201
-244
-duration_exposed
-duration_exposed
+308
+191
+341
+duration_infected
+duration_infected
 0
-3650
-51.0
+100
+13.0
 1
 1
 NIL
@@ -173,24 +220,9 @@ HORIZONTAL
 
 SLIDER
 20
-250
+351
 193
-283
-duration_infected
-duration_infected
-0
-3650
-50.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-20
-291
-193
-324
+384
 duration_quarantined
 duration_quarantined
 0
@@ -202,30 +234,60 @@ NIL
 HORIZONTAL
 
 SLIDER
-21
-335
-194
-368
+20
+393
+193
+426
 mortality_rate
 mortality_rate
 0
 100
-1.0
+100.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-22
-383
-194
-416
+17
+133
+189
+166
 prob_get_infected
 prob_get_infected
 0
 100
 50.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+342
+458
+514
+491
+radius
+radius
+0
+10000
+1146.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+162
+458
+334
+491
+start_count_infected
+start_count_infected
+1
+100
+11.0
 1
 1
 NIL
