@@ -1,5 +1,4 @@
 
-
 turtles-own [
   state   ; состояние агента: susceptible, exposed, infected, quarantined, recovered, died
   days_in_this_state  ; количество дней, проведенных в состоянии infected
