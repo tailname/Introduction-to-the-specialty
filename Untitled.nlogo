@@ -1,9 +1,12 @@
+globals[
+  count_of_infected
+  count_of_died
+]
 
 turtles-own [
   state   ; состояние агента: susceptible, exposed, infected, quarantined, recovered, died
   days_in_this_state  ; количество дней, проведенных в состоянии infected
 ]
-
 
 to move[agent]
   ask agent [
@@ -17,8 +20,7 @@ to move[agent]
 end
 
 to setup
-
-
+  set count_of_infected 0
   clear-all
   ask patches [ set pcolor white ]
   create-turtles population [
@@ -35,8 +37,8 @@ to setup
 end
 
 to go
+  set count_of_died 0
   ask turtles [
-
     if state = "susceptible"[
       move self
       if  any? other turtles with [state = "infected"] and distance self  < 3 [
@@ -54,24 +56,28 @@ to go
         set color red
         set state "infected"
         set days_in_this_state 0
+        set count_of_infected count_of_infected + 1
       ]
     ]
 
     if state = "infected" [
       move self
       set days_in_this_state days_in_this_state + 1
-      if days_in_this_state >= duration_infected [
+      if days_in_this_state > duration_infected [
         ifelse random-float 100 < mortality_rate [
           set color black
           set state "died"
+          set count_of_died count_of_died + 1
+          set count_of_infected count_of_infected - 1
         ]
         [
           set days_in_this_state 0
           set color green
           set state "recovered"
+          set count_of_infected count_of_infected - 1
         ]
       ]
-      if days_in_this_state = days_before_quarantined [
+      if days_in_this_state >= days_before_quarantined and state = "infected" [
         if random-float 100 < prob_go_quarantined [
           set color magenta
           set state "quarantined"
@@ -85,11 +91,14 @@ to go
         ifelse random-float 100 < mortality_rate [
           set color black
           set state "died"
+          set count_of_died count_of_died + 1
+          set count_of_infected count_of_infected - 1
         ]
         [
           set days_in_this_state 0
           set color green
           set state "recovered"
+          set count_of_infected count_of_infected - 1
         ]
       ]
     ]
@@ -105,10 +114,10 @@ to go
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
-10
-647
-448
+305
+11
+742
+449
 -1
 -1
 13.0
@@ -128,14 +137,14 @@ GRAPHICS-WINDOW
 0
 0
 1
-ticks
+Days
 30.0
 
 BUTTON
-19
-37
-82
-70
+15
+125
+78
+158
 NIL
 go
 NIL
@@ -149,10 +158,10 @@ NIL
 1
 
 BUTTON
-108
-38
-171
-71
+12
+10
+75
+43
 NIL
 setup
 NIL
@@ -166,72 +175,42 @@ NIL
 1
 
 SLIDER
-18
-90
-190
-123
-population
-population
-0
-100
-100.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-19
-177
-191
-210
-prob_go_quarantined
-prob_go_quarantined
-0
-100
-57.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-19
-218
-208
-251
-days_before_quarantined
-days_before_quarantined
-0
-100
-0.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-20
-265
+97
+170
+269
 203
-298
-duration_exposed
-duration_exposed
+population
+population
 0
-3650
-6.0
+1000
+64.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-18
-308
-191
-341
-duration_infected
-duration_infected
+100
+461
+272
+494
+prob_go_quarantined
+prob_go_quarantined
+0
+100
+61.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+100
+420
+289
+453
+days_before_quarantined
+days_before_quarantined
 0
 100
 13.0
@@ -241,10 +220,40 @@ NIL
 HORIZONTAL
 
 SLIDER
-20
-351
-193
-384
+100
+338
+284
+371
+duration_exposed
+duration_exposed
+0
+100
+8.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+100
+376
+273
+409
+duration_infected
+duration_infected
+0
+100
+7.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+297
+460
+470
+493
 duration_quarantined
 duration_quarantined
 0
@@ -256,10 +265,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-20
-393
-193
-426
+494
+460
+667
+493
 mortality_rate
 mortality_rate
 0
@@ -271,10 +280,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-17
-133
-189
-166
+100
+294
+272
+327
 prob_get_infected
 prob_get_infected
 0
@@ -286,34 +295,53 @@ NIL
 HORIZONTAL
 
 SLIDER
-342
-458
-514
-491
+98
+252
+270
+285
 radius
 radius
 0
-10000
-1146.0
+100
+100.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-162
-458
-334
-491
+98
+211
+270
+244
 start_count_infected
 start_count_infected
 1
 100
-11.0
+9.0
 1
 1
 NIL
 HORIZONTAL
+
+PLOT
+96
+10
+296
+160
+Died - Infected
+Days
+Count
+0.0
+70.0
+0.0
+70.0
+true
+false
+"" ""
+PENS
+"Infected" 1.0 0 -5298144 true "" "plot count_of_infected"
+"Died" 1.0 0 -16777216 true "" "plot count_of_died"
 
 @#$#@#$#@
 ## WHAT IS IT?
