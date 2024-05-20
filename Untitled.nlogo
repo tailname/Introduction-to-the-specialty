@@ -181,7 +181,7 @@ population
 population
 0
 1000
-64.0
+115.0
 1
 1
 NIL
@@ -196,7 +196,7 @@ prob_go_quarantined
 prob_go_quarantined
 0
 100
-61.0
+37.0
 1
 1
 NIL
@@ -211,7 +211,7 @@ days_before_quarantined
 days_before_quarantined
 0
 100
-13.0
+3.0
 1
 1
 NIL
@@ -226,7 +226,7 @@ duration_exposed
 duration_exposed
 0
 100
-8.0
+5.0
 1
 1
 NIL
@@ -256,7 +256,7 @@ duration_quarantined
 duration_quarantined
 0
 3650
-50.0
+14.0
 1
 1
 NIL
@@ -271,7 +271,7 @@ mortality_rate
 mortality_rate
 0
 100
-30.0
+4.0
 1
 1
 NIL
@@ -286,7 +286,7 @@ prob_get_infected
 prob_get_infected
 0
 100
-50.0
+20.0
 1
 1
 NIL
@@ -301,7 +301,7 @@ radius
 radius
 0
 100
-100.0
+6.0
 1
 1
 NIL
