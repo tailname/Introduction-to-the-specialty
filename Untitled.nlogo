@@ -20,7 +20,7 @@ to move[agent]
 end
 
 to setup
-  set count_of_infected 0
+
   clear-all
   ask patches [ set pcolor white ]
   create-turtles population [
@@ -34,12 +34,14 @@ to setup
     set color red
   ]
   reset-ticks
+  set count_of_infected start_count_infected
 end
 
 to go
   set count_of_died 0
   ask turtles [
-    if state = "susceptible"[
+    (ifelse
+      state = "susceptible"[
       move self
       if  any? other turtles with [state = "infected"] and distance self  < 3 [
         if random-float 100 < prob_get_infected [
@@ -48,8 +50,7 @@ to go
         ]
       ]
     ]
-
-    if state = "exposed" [
+     state = "exposed" [
       move self
       set days_in_this_state  days_in_this_state + 1
       if days_in_this_state >= duration_exposed[
@@ -59,8 +60,7 @@ to go
         set count_of_infected count_of_infected + 1
       ]
     ]
-
-    if state = "infected" [
+     state = "infected" [
       move self
       set days_in_this_state days_in_this_state + 1
       if days_in_this_state > duration_infected [
@@ -84,8 +84,7 @@ to go
           ]
       ]
     ]
-
-    if state = "quarantined"[
+     state = "quarantined"[
       set days_in_this_state days_in_this_state + 1
       if days_in_this_state >= duration_infected [
         ifelse random-float 100 < mortality_rate [
@@ -102,10 +101,9 @@ to go
         ]
       ]
     ]
-
-    if state = "recovered"[
+     state = "recovered"[
       move self
-    ]
+    ])
 
   ]
 
@@ -147,7 +145,7 @@ BUTTON
 158
 NIL
 go
-NIL
+T
 1
 T
 OBSERVER
