@@ -34,11 +34,11 @@ to setup
     set color red
   ]
   reset-ticks
-  set count_of_infected start_count_infected
 end
 
 to go
   set count_of_died 0
+  set count_of_infected 0
   ask turtles [
     (ifelse
       state = "susceptible"[
@@ -68,13 +68,13 @@ to go
           set color black
           set state "died"
           set count_of_died count_of_died + 1
-          set count_of_infected count_of_infected - 1
+
         ]
         [
           set days_in_this_state 0
           set color green
           set state "recovered"
-          set count_of_infected count_of_infected - 1
+
         ]
       ]
       if days_in_this_state >= days_before_quarantined and state = "infected" [
@@ -91,13 +91,13 @@ to go
           set color black
           set state "died"
           set count_of_died count_of_died + 1
-          set count_of_infected count_of_infected - 1
+
         ]
         [
           set days_in_this_state 0
           set color green
           set state "recovered"
-          set count_of_infected count_of_infected - 1
+
         ]
       ]
     ]
