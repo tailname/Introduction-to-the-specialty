@@ -181,7 +181,7 @@ population
 population
 0
 1000
-115.0
+210.0
 1
 1
 NIL
@@ -271,7 +271,7 @@ mortality_rate
 mortality_rate
 0
 100
-4.0
+1.6
 1
 1
 NIL
@@ -286,7 +286,7 @@ prob_get_infected
 prob_get_infected
 0
 100
-20.0
+9.0
 1
 1
 NIL
@@ -687,6 +687,45 @@ NetLogo 6.4.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="experiment" repetitions="6" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="100"/>
+    <metric>count_of_infected</metric>
+    <metric>count_of_died</metric>
+    <enumeratedValueSet variable="days_before_quarantined">
+      <value value="3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="prob_get_infected">
+      <value value="20"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="duration_quarantined">
+      <value value="14"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="start_count_infected">
+      <value value="9"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="radius">
+      <value value="6"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="duration_exposed">
+      <value value="5.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="population">
+      <value value="210"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="prob_go_quarantined">
+      <value value="37"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="mortality_rate">
+      <value value="1.6"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="duration_infected">
+      <value value="7"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default
