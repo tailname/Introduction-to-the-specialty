@@ -2,7 +2,6 @@ globals[
   count_of_infected
   count_of_died
 ]
-
 turtles-own [
   state   ; состояние агента: susceptible, exposed, infected, quarantined, recovered, died
   days_in_this_state  ; количество дней, проведенных в состоянии infected
@@ -106,7 +105,9 @@ to go
     ])
 
   ]
-
+  if not any? turtles with [state = "infected"] and not any? turtles with [state = "quarantined"][
+    stop
+  ]
   tick
 
 end
@@ -301,7 +302,7 @@ radius
 radius
 0
 100
-6.0
+29.0
 1
 1
 NIL
